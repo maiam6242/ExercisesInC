@@ -33,8 +33,20 @@ s: string
 returns: string
 */
 char *reverse_string(char *s) {
-    //TODO: Fill this in.
-    return "";
+    
+    int length = strlen(s);
+    char term = '\0';
+
+    char str[length];
+
+    for (int i = 1; i <= length; i++){
+        char last = *(s + length - i);
+        str[i-1] = last;
+    }
+    
+    str[length] = term;
+    char *p = str;
+    return p;
 }
 
 /* ctoi: Converts a character to integer.
@@ -53,8 +65,31 @@ i: integer 0 to 9
 returns: character '0' to '9'
 */
 char itoc(int i) {
-    //TODO: Fill this in, with an appropriate assertion.
-    return '0';
+
+    assert(i >= 0 && i <=9);
+    switch(i){
+        case 0:
+            return '0';
+        case 1:
+            return '1';
+        case 2:
+            return '2';
+        case 3:
+            return '3';
+        case 4:
+            return '4';
+        case 5:
+            return '5';
+        case 6:
+            return '6';
+        case 7:
+            return '7';
+        case 8:
+            return '8';
+        case 9:
+            return '9';
+    }
+
 }
 
 /* add_digits: Adds two decimal digits, returns the total and carry.
@@ -70,7 +105,14 @@ carry: pointer to char
 
 */
 void add_digits(char a, char b, char c, char *total, char *carry) {
-    //TODO: Fill this in.
+    //TODO: Fill this in.  
+  
+    int sum = ctoi(a) + ctoi(b) + ctoi(c);
+    
+      
+    *total = itoc(sum%10);
+    *carry = itoc(sum/10);
+
 }
 
 /* Define a type to represent a BigInt.
