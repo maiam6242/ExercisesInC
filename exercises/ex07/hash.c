@@ -178,8 +178,11 @@ int hash_hashable(Hashable *hashable)
 */
 int equal_int (void *ip, void *jp)
 {
-    // FILL THIS IN!
-    return 0;
+    
+    int x = *(int*) ip;
+    int y = *(int*) jp; 
+
+    return x == y;
 }
 
 
@@ -192,8 +195,8 @@ int equal_int (void *ip, void *jp)
 */
 int equal_string (void *s1, void *s2)
 {
-    // FILL THIS IN!
-    return 0;
+    return strcmp((char*)s1,(char*)s2) == 0;
+    
 }
 
 
@@ -207,8 +210,7 @@ int equal_string (void *s1, void *s2)
 */
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
-    // FILL THIS IN!
-    return 0;
+    h1 -> equal(h1->key, h2->key);
 }
 
 
@@ -296,7 +298,12 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 /* Looks up a key and returns the corresponding value, or NULL */
 Value *list_lookup(Node *list, Hashable *key)
 {
-    // FILL THIS IN!
+    for (Node* n = list; n != NULL; n = n-> next){
+        if (equal_hashable(key, n-> key) == 1){
+            return n -> value;
+        }
+    }
+
     return NULL;
 }
 
@@ -341,15 +348,22 @@ void print_map(Map *map)
 /* Adds a key-value pair to a map. */
 void map_add(Map *map, Hashable *key, Value *value)
 {
-    // FILL THIS IN!
+    int hash = hash_hashable(key);
+    if(map->lists[hash % map-> n] != NULL){
+        map->lists[hash % map -> n] = prepend(key, value, map -> lists[hash % map -> n]);
+    }
+    else
+    {
+        map->lists[hash % map -> n] = make_node(key, value, NULL);
+    }
+    
 }
 
 
 /* Looks up a key and returns the corresponding value, or NULL. */
 Value *map_lookup(Map *map, Hashable *key)
 {
-    // FILL THIS IN!
-    return NULL;
+    return list_lookup(map->lists[hash_hashable(key) % map->n],key);
 }
 
 
@@ -377,6 +391,7 @@ int main ()
     Node *list = prepend(hashable2, value2, node1);
     print_list (list);
 
+
     // run some test lookups
     Value *value = list_lookup (list, hashable1);
     print_lookup(value);
@@ -386,6 +401,7 @@ int main ()
 
     value = list_lookup (list, hashable3);
     print_lookup(value);
+    
 
     // make a map
     Map *map = make_map(10);
